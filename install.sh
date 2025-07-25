@@ -1,24 +1,43 @@
 #!/bin/bash
 
-echo "🌐 Setting up TerminalGPT cloud CLI..."
+echo "Installing TerminalAI CLI..."
 
-# 🔗 Define your hosted API URL
-API_URL="https://terminalgpt.onrender.com"
+# Download latest CLI from your GitHub repo
+curl -sL https://raw.githubusercontent.com/aliseidu8855/terminalAI/main/cli.py -o terminalai.py
 
-# 🔐 Prompt for user token
-echo "Enter your X-Token (auth key):"
-read -r USER_TOKEN
+# Make it executable
+chmod +x terminalai.py
 
-# 📝 Download CLI template
-curl -s https://raw.githubusercontent.com/yourusername/terminalgpt/main/cli.py -o terminalgpt.py
+# Move to global path
+sudo mv terminalai.py /usr/local/bin/terminalai
 
-# 🧠 Inject API URL and token
-sed -i "s|API_URL = .*|API_URL = \"$API_URL\"|" terminalgpt.py
-sed -i "s|TOKEN = .*|TOKEN = \"$USER_TOKEN\"|" terminalgpt.py
+# Create systemd service file
+SERVICE_PATH="/etc/systemd/system/terminalai.service"
+echo "Creating systemd service..."
 
-# 🔗 Make globally accessible
-chmod +x terminalgpt.py
-sudo mv terminalgpt.py /usr/local/bin/terminalgpt
+sudo tee $SERVICE_PATH > /dev/null <<EOF
+[Unit]
+Description=TerminalAI Background Service
+After=network.target
 
-echo "✅ Installed TerminalGPT CLI globally!"
-echo "📟 Try: terminalgpt translate \"show logged-in users\""
+[Service]
+User=$USER
+WorkingDirectory=/usr/local/bin
+ExecStart=/usr/bin/python3 /usr/local/bin/terminalai optimize
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Reload daemon and enable service
+sudo systemctl daemon-reexec
+sudo systemctl enable terminalai
+sudo systemctl start terminalai
+
+echo "TerminalAI installed and running!"
+echo "You can now run commands like:"
+echo "   terminalai translate 'list files modified yesterday'"
+echo "   terminalai explain 'sudo apt purge firefox'"
+echo "   terminalai optimize"
