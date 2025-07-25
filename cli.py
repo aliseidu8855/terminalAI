@@ -1,21 +1,25 @@
+
 import argparse
 import requests
-import os
-from dotenv import load_dotenv
 
-load_dotenv()
+API_URL = "https://terminalai-f9e6f5821023.herokuapp.com/"
 
-API_URL = "https://terminalai-f9e6f5821023.herokuapp.com/"  # Replace with your live Render URL
-TOKEN = os.getenv("GOOGLE_API_KEY")
+TOKEN = "tA-s3cr3t-p@ssw0rd-f0r-my-@pi-4815162342"
 
 def call_api(endpoint, payload=None):
-    headers = {"X-Token": TOKEN} if TOKEN else {}
+    headers = {"X-Token": TOKEN}
     url = f"{API_URL}/{endpoint}"
-    response = requests.post(url, json=payload, headers=headers) if payload else requests.get(url, headers=headers)
-    if response.status_code == 200:
+    
+    try:
+        response = requests.post(url, json=payload, headers=headers) if payload else requests.get(url, headers=headers)
+        response.raise_for_status() 
         print(response.json())
-    else:
-        print(f"Error {response.status_code}: {response.text}")
+    except requests.exceptions.HTTPError as http_err:
+        print(f"HTTP Error: {http_err}")
+        print(f"Response Body: {response.text}")
+    except requests.exceptions.RequestException as err:
+        print(f"An error occurred: {err}")
+
 
 parser = argparse.ArgumentParser(description="TerminalGPT CLI")
 parser.add_argument("mode", choices=["translate", "explain", "optimize"])
