@@ -1,28 +1,39 @@
-.venv/
-.idea/
-*.pyc
+# Byte-compiled / optimized / DLL files
 __pycache__/
-*.pyo
-*.pyd
-*.db
-*.sqlite3
+*.py[cod]
+*$py.class
+
+# Virtual environment
+.venv/
+env/
+ENV/
+
+# Logs
 *.log
+
+# Environment variables
+.env
 *.env
-*.DS_Store
-*.egg-info/
-*.coverage
-dist/
-build/
-.eggs/
-*.egg
-*.whl
-*.tar.gz
-*.zip
-*.bak
+
+# macOS / Linux system files
+.DS_Store
 *.swp
-*.tmp
-*.pid
-*.orig
-*.rej
-*.swo   
-terminalgpt.log
+
+# VS Code settings
+.vscode/
+
+# Pytest cache
+.pytest_cache/
+
+# Coverage reports
+htmlcov/
+.coverage
+coverage.xml
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
