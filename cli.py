@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-API_URL = "http://127.0.0.1:8000"  # Replace with your live Render URL
+API_URL = "https://terminalai-f9e6f5821023.herokuapp.com/"  # Replace with your live Render URL
 TOKEN = os.getenv("GOOGLE_API_KEY")
 
 def call_api(endpoint, payload=None):
